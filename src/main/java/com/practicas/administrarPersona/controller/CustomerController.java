@@ -2,7 +2,6 @@ package com.practicas.administrarPersona.controller;
 
 import com.practicas.administrarPersona.model.Customer;
 import com.practicas.administrarPersona.service.CustomerService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class CustomerController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<Customer>> getCustomerByName() {
+    public ResponseEntity<Set<Customer>> getAllCustomer() {
         return ResponseEntity.ok(customerService.allCustomers());
     }
 
