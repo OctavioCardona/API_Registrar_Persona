@@ -25,11 +25,11 @@ public class CustomerService {
 
     public void updateCustomer(Customer customer) {
         Set<Customer> customers = allCustomers();
-        Set<Customer> updateCustomers =
+        customers =
                 customers.stream()
                 .map(custom -> custom.getName().equalsIgnoreCase(customer.getName()) ? customer : custom)
                 .collect(Collectors.toSet());
-        Util.updateFile(updateCustomers);
+        Util.updateFile(customers);
     }
 
     public Customer getCustomerByName(String name){
