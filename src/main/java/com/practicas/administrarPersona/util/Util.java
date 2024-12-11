@@ -34,9 +34,10 @@ public class Util {
         }
     }
 
-    public static void writeFile (Customer customer) {
+    public static Customer writeFile (Customer customer) {
         try(FileWriter writer = new FileWriter(pathFile.toFile(),true)){
             writer.write(customer.toString());
+            return customer;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

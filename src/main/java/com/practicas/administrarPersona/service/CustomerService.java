@@ -13,8 +13,8 @@ public class CustomerService {
         return Util.readFile();
     }
 
-    public void createCustomer(Customer customer){
-        Util.writeFile(customer);
+    public Customer createCustomer(Customer customer){
+        return Util.writeFile(customer);
     }
 
     public void deleteCustomer(String name){

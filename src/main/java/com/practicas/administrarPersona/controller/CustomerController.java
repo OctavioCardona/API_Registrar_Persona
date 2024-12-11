@@ -2,6 +2,7 @@ package com.practicas.administrarPersona.controller;
 
 import com.practicas.administrarPersona.model.Customer;
 import com.practicas.administrarPersona.service.CustomerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
@@ -17,19 +18,20 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createCustomer(@RequestBody Customer customer){
-        customerService.createCustomer(customer);
-        return ResponseEntity.ok("The operatiton was successful");
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
+        Customer createCustomer = customerService.createCustomer(customer);
+        return new ResponseEntity<>(createCustomer,HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<Customer> getCustomerByName(@PathVariable String name) {
-        return ResponseEntity.ok(customerService.getCustomerByName(name));
+        Customer getCustomer = customerService.getCustomerByName(name);
+        return new ResponseEntity<>(getCustomer,HttpStatus.OK);
     }
 
     @GetMapping("/")
     public ResponseEntity<Set<Customer>> getAllCustomer() {
-        return ResponseEntity.ok(customerService.allCustomers());
+        return new ResponseEntity<>(customerService.allCustomers(),HttpStatus.OK);
     }
 
     @DeleteMapping("/{name}")
