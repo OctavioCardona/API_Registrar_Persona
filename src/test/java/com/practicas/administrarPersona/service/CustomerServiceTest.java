@@ -24,6 +24,8 @@ public class CustomerServiceTest {
 
     private Set<Customer> customers;
 
+    private final String fileName = "customers.txt";
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -48,7 +50,7 @@ public class CustomerServiceTest {
     public void allCustomersTest() {
         try(MockedStatic<Util> util = mockStatic(Util.class)) {
             util.when(Util::readFile).thenReturn(customers);
-            Set<Customer> customersReadFile = customerService.allCustomers();
+            Set<Customer> customersReadFile = customerService.allCustomers(fileName);
             assertTrue(customersReadFile.containsAll(customers));
         }
     }
@@ -62,7 +64,7 @@ public class CustomerServiceTest {
 
         try(MockedStatic<Util> util = mockStatic(Util.class)) {
             util.when(() -> Util.writeFile(customer)).thenReturn(customer);
-            Customer customerWrite = customerService.createCustomer(customer);
+            Customer customerWrite = customerService.createCustomer(customer, fileName);
             assertEquals(customer, customerWrite);
         }
     }
@@ -72,7 +74,7 @@ public class CustomerServiceTest {
 
         try(MockedStatic<Util> util = mockStatic(Util.class)) {
             util.when(Util::readFile).thenReturn(customers);
-            customerService.deleteCustomer("Octavio Cardona");
+            customerService.deleteCustomer("Octavio Cardona", fileName);
             customers.removeIf(custom -> custom.getName().equalsIgnoreCase("Octavio Cardona"));
             assertTrue(customers.stream().noneMatch(custom->custom.getName().equalsIgnoreCase("Octavio Cardona")));
         }
@@ -87,7 +89,7 @@ public class CustomerServiceTest {
 
         try(MockedStatic<Util> util = mockStatic(Util.class)) {
             util.when(Util::readFile).thenReturn(customers);
-            customerService.updateCustomer(customer);
+            customerService.updateCustomer(customer, fileName);
             customers = customers
                     .stream()
                     .map(custom -> custom.getName().equalsIgnoreCase(customer.getName()) ? customer : custom)
@@ -106,7 +108,7 @@ public class CustomerServiceTest {
 
         try(MockedStatic<Util> util = mockStatic(Util.class)) {
             util.when(Util::readFile).thenReturn(customers);
-            Customer customerByName = customerService.getCustomerByName("Octavio Cardona");
+            Customer customerByName = customerService.getCustomerByName("Octavio Cardona", fileName);
             assertEquals(customer.toString(), customerByName.toString());
         }
     }

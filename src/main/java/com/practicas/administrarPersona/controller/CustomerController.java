@@ -22,35 +22,35 @@ public class CustomerController {
 
     @Operation(summary = "Crea y guarda una persona")
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
-        Customer createCustomer = customerService.createCustomer(customer);
+    public ResponseEntity<Customer> createCustomer(@RequestHeader String fileName, @RequestBody Customer customer){
+        Customer createCustomer = customerService.createCustomer(customer, fileName);
         return new ResponseEntity<>(createCustomer,HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene por nombre la información de una persona")
     @GetMapping("/{name}")
-    public ResponseEntity<Customer> getCustomerByName(@PathVariable String name) {
-        Customer getCustomer = customerService.getCustomerByName(name);
+    public ResponseEntity<Customer> getCustomerByName(@RequestHeader String fileName, @PathVariable String name) {
+        Customer getCustomer = customerService.getCustomerByName(name,fileName);
         return new ResponseEntity<>(getCustomer,HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene todo el personal registrado")
     @GetMapping("/")
-    public ResponseEntity<Set<Customer>> getAllCustomer() {
-        return new ResponseEntity<>(customerService.allCustomers(),HttpStatus.OK);
+    public ResponseEntity<Set<Customer>> getAllCustomer(@RequestHeader String fileName) {
+        return new ResponseEntity<>(customerService.allCustomers(fileName),HttpStatus.OK);
     }
 
     @Operation(summary = "Borra por nombre los datos de una persona")
     @DeleteMapping("/{name}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable String name) {
-        customerService.deleteCustomer(name);
+    public ResponseEntity<String> deleteCustomer(@RequestHeader String fileName, @PathVariable String name) {
+        customerService.deleteCustomer(name,fileName);
         return ResponseEntity.ok("The operatiton was successful");
     }
 
     @Operation(summary = "Actualiza los datos de una persona")
     @PutMapping
-    public ResponseEntity<String> updateCustomer (@RequestBody Customer customer) {
-        customerService.updateCustomer(customer);
+    public ResponseEntity<String> updateCustomer (@RequestHeader String fileName, @RequestBody Customer customer) {
+        customerService.updateCustomer(customer,fileName);
         return ResponseEntity.ok("The operatiton was successful");
     }
 

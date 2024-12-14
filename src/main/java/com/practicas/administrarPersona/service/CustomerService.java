@@ -9,22 +9,24 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService {
 
-    public Set<Customer> allCustomers(){
+    public Set<Customer> allCustomers(String fileName){
+        Util.chooseFile(fileName);
         return Util.readFile();
     }
 
-    public Customer createCustomer(Customer customer){
+    public Customer createCustomer(Customer customer, String fileName){
+        Util.chooseFile(fileName);
         return Util.writeFile(customer);
     }
 
-    public void deleteCustomer(String name){
-        Set<Customer> customers = allCustomers();
+    public void deleteCustomer(String name, String fileName){
+        Set<Customer> customers = allCustomers(fileName);
         customers.removeIf(custom -> custom.getName().equalsIgnoreCase(name));
         Util.updateFile(customers);
     }
 
-    public void updateCustomer(Customer customer) {
-        Set<Customer> customers = allCustomers();
+    public void updateCustomer(Customer customer, String fileName) {
+        Set<Customer> customers = allCustomers(fileName);
         customers =
                 customers.stream()
                 .map(custom -> custom.getName().equalsIgnoreCase(customer.getName()) ? customer : custom)
@@ -32,8 +34,8 @@ public class CustomerService {
         Util.updateFile(customers);
     }
 
-    public Customer getCustomerByName(String name){
-        Set<Customer> customers = allCustomers();
+    public Customer getCustomerByName(String name, String fileName){
+        Set<Customer> customers = allCustomers(fileName);
         return customers
                 .stream()
                 .filter(custom -> custom.getName().trim().equalsIgnoreCase(name))

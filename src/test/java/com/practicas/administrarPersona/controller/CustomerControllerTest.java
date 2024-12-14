@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
@@ -26,6 +27,8 @@ public class CustomerControllerTest {
 
     @Mock
     private CustomerService customerService;
+
+    private final String fileName = "customer.txt";
 
     @BeforeEach
     public void setUp(){
@@ -39,10 +42,10 @@ public class CustomerControllerTest {
         Customer customer = new Customer();
         customer.setName("Octavio Cardona");
         customer.setAge(24);
-        customer.setBirthday(LocalDate.ofEpochDay(2000-03-27));
+        customer.setBirthday(LocalDate.ofEpochDay(2000-3-27));
 
-        Mockito.when(customerService.createCustomer(any(Customer.class))).thenReturn(customer);
-        ResponseEntity<Customer> response = customerController.createCustomer(customer);
+        Mockito.when(customerService.createCustomer(any(Customer.class),eq(fileName))).thenReturn(customer);
+        ResponseEntity<Customer> response = customerController.createCustomer(fileName, customer);
 
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertEquals(customer, response.getBody());
@@ -55,8 +58,8 @@ public class CustomerControllerTest {
         customer.setAge(24);
         customer.setBirthday(LocalDate.parse("2000-03-27"));
 
-        Mockito.when(customerService.getCustomerByName(customer.getName())).thenReturn(customer);
-        ResponseEntity<Customer> response = customerController.getCustomerByName(customer.getName());
+        Mockito.when(customerService.getCustomerByName(customer.getName(), fileName)).thenReturn(customer);
+        ResponseEntity<Customer> response = customerController.getCustomerByName(fileName, customer.getName());
 
         assertEquals(HttpStatusCode.valueOf(200),response.getStatusCode());
         assertEquals(customer, response.getBody());
@@ -79,8 +82,8 @@ public class CustomerControllerTest {
         customers.add(customer);
         customers.add(customer1);
 
-        Mockito.when(customerService.allCustomers()).thenReturn(customers);
-        ResponseEntity<Set<Customer>> response = customerController.getAllCustomer();
+        Mockito.when(customerService.allCustomers(fileName)).thenReturn(customers);
+        ResponseEntity<Set<Customer>> response = customerController.getAllCustomer(fileName);
 
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertEquals(customers, response.getBody());
@@ -88,11 +91,11 @@ public class CustomerControllerTest {
 
     @Test
     public void deleteCustomerTest(){
-        doNothing().when(customerService).deleteCustomer("Octavio Cardona");
+        doNothing().when(customerService).deleteCustomer("Octavio Cardona", "customers.txt");
 
-        ResponseEntity<String> response = customerController.deleteCustomer("Octavio Cardona");
+        ResponseEntity<String> response = customerController.deleteCustomer(fileName,"Octavio Cardona");
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertEquals("The operatiton was successful", response.getBody());
     }
 
@@ -103,9 +106,9 @@ public class CustomerControllerTest {
         customer.setAge(24);
         customer.setBirthday(LocalDate.parse("2000-03-27"));
 
-        doNothing().when(customerService).updateCustomer(any(Customer.class));
+        doNothing().when(customerService).updateCustomer(any(Customer.class), eq(fileName));
 
-        ResponseEntity<String> response = customerController.updateCustomer(customer);
+        ResponseEntity<String> response = customerController.updateCustomer(fileName, customer);
 
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
         assertEquals("The operatiton was successful", response.getBody());

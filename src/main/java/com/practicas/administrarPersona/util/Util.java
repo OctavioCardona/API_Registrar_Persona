@@ -9,25 +9,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Util {
 
-    private static final Path pathFile = Paths.get("customers.txt");
+    private static Path pathFile;
+
+    public static void chooseFile(String fileName) {
+        pathFile = Paths.get(fileName);
+    }
 
     public static Set<Customer> readFile() {
         Set<Customer> customers = new HashSet<>();
         try{
-            List<String> allLines= Files.readAllLines(pathFile);
-            for (String line : allLines) {
-                String [] data = line.split(",");
-                Customer customer = new Customer();
-                customer.setName(data[0]);
-                customer.setAge(Integer.parseInt(data[1]));
-                customer.setBirthday(LocalDate.parse(data[2]));
-                customers.add(customer);
-            }
+            customers = Files.readAllLines(pathFile).stream()
+                    .map(line-> {
+                        String[] data = line.split(",");
+                        return new Customer(data[0],Integer.parseInt(data[1]),LocalDate.parse(data[2]));
+                    }).collect(Collectors.toSet());
             return customers;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
