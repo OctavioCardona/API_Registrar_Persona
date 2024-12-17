@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
+/**
+ * Class SwaggerConfig to config swagger and OpenApi
+ */
 
 @Configuration
 public class SwaggerConfig {
@@ -14,9 +16,9 @@ public class SwaggerConfig {
     public OpenAPI openApi (@Value("0.0.1-SNAPSHOT") String appVersion) {
         return new OpenAPI()
                 .info(new Info()
-                        .title("AdministrarPersonal")
+                        .title("AdministrarPersona")
                         .version(appVersion)
-                        .description("API para administrar personal")
+                        .description("API to manage customers")
                 );
     }
 }

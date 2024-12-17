@@ -12,14 +12,30 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Class Util with methods write, read and update in file.
+ */
 public class Util {
 
+    /**
+     * Static variable of Path where the file will be.
+     */
     private static Path pathFile;
 
+    /**
+     * Method chooseFile to select the file to use.
+     *
+     * @param fileName the name of file to use.
+     */
     public static void chooseFile(String fileName) {
         pathFile = Paths.get(fileName);
     }
 
+    /**
+     * Method readFile to read the file where going to work.
+     *
+     * @return a list of all customer inside the file.
+     */
     public static Set<Customer> readFile() {
         Set<Customer> customers = new HashSet<>();
         try{
@@ -34,6 +50,12 @@ public class Util {
         }
     }
 
+    /**
+     * Method writeFile to write inside the file the customer data.
+     *
+     * @param customer object with data of customers.
+     * @return a customer Object with his data.
+     */
     public static Customer writeFile (Customer customer) {
         try(FileWriter writer = new FileWriter(pathFile.toFile(),true)){
             writer.write(customer.toString());
@@ -43,6 +65,11 @@ public class Util {
         }
     }
 
+    /**
+     * Method updateFile to update new data of customers.
+     *
+     * @param customers object with data of customers.
+     */
     public static void updateFile (Set<Customer> customers) {
         try(BufferedWriter writer = Files.newBufferedWriter(pathFile)) {
             for (Customer customer : customers) {
